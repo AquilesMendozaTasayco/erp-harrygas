@@ -1,18 +1,25 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { NextResponse } from "next/server";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+export function middleware(req) {
+  const url = req.nextUrl.clone();
+  const user = req.cookies.get("user")?.value;
 
-export default eslintConfig;
+  // Si no hay sesión y se intenta entrar al dashboard
+  if (!user && url.pathname.startsWith("/dashboard")) {
+    url.pathname = "/auth/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Si hay sesión y trata de entrar al login o register, lo redirige al dashboard
+  if (user && (url.pathname.startsWith("/auth/login") || url.pathname.startsWith("/auth/register"))) {
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
+
+// Aplica a estas rutas
+export const config = {
+  matcher: ["/dashboard/:path*", "/auth/:path*"],
+};

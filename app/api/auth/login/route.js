@@ -6,7 +6,6 @@ export async function POST(request) {
   try {
     const { correo, contrasena } = await request.json();
 
-    // Conexión MySQL
     const connection = await mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -14,7 +13,6 @@ export async function POST(request) {
       database: process.env.DB_NAME,
     });
 
-    // Buscar usuario
     const [rows] = await connection.execute(
       "SELECT id_usuario, nombre, apellido, correo, contrasena, id_rol FROM usuarios WHERE correo = ?",
       [correo]
@@ -22,21 +20,17 @@ export async function POST(request) {
 
     await connection.end();
 
-    // Validar existencia
     if (rows.length === 0) {
       return NextResponse.json({ success: false, error: "Correo no encontrado" });
     }
 
     const user = rows[0];
 
-    // Comparar contraseña (sin hash)
     if (user.contrasena !== contrasena) {
       return NextResponse.json({ success: false, error: "Contraseña incorrecta" });
     }
 
-    // ============================
-    // 🔥 CREAR TOKEN JWT
-    // ============================
+
     const token = jwt.sign(
       {
         id: user.id_usuario,
@@ -48,9 +42,7 @@ export async function POST(request) {
       { expiresIn: "7d" }
     );
 
-    // ============================
-    // 🔥 RESPUESTA + COOKIE
-    // ============================
+
     const response = NextResponse.json({
       success: true,
       message: "Inicio de sesión exitoso",
@@ -67,7 +59,7 @@ export async function POST(request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 días
+      maxAge: 60 * 60 * 24 * 7, 
     });
 
     return response;

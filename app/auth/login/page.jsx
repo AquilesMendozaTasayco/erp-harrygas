@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -15,12 +16,13 @@ export default function LoginPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+
     const data = await res.json();
+    console.log("LOGIN RESPONSE:", data);
 
     if (data.success) {
-      localStorage.setItem("user", JSON.stringify(data.data));
       toast.success(data.message);
-      router.push("/dashboard");
+      router.push("/dashboard"); // 🔥 ahora sí te deja pasar
     } else {
       toast.error(data.error);
     }
@@ -38,21 +40,20 @@ export default function LoginPage() {
 
         <input
           type="email"
-          name="correo"
           placeholder="Correo electrónico"
           value={form.correo}
           onChange={(e) => setForm({ ...form, correo: e.target.value })}
-          required
           className="border rounded-md px-3 py-2 w-full"
+          required
         />
+
         <input
           type="password"
-          name="contrasena"
           placeholder="Contraseña"
           value={form.contrasena}
           onChange={(e) => setForm({ ...form, contrasena: e.target.value })}
-          required
           className="border rounded-md px-3 py-2 w-full"
+          required
         />
 
         <button

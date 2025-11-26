@@ -13,6 +13,7 @@ const menuItems = [
   { name: "Usuarios", icon: Users, href: "/dashboard/usuarios" },
   { name: "Clientes", icon: Users, href: "/dashboard/clientes" },
   { name: "Productos", icon: Package, href: "/dashboard/productos" },
+  { name: "Proveedores", icon: Package, href: "/dashboard/proveedores" },
   { name: "Ventas", icon: ShoppingCart, href: "/dashboard/ventas" },
   { name: "Pedidos", icon: Truck, href: "/dashboard/pedidos" },
   { name: "Reportes", icon: BarChart3, href: "/dashboard/reportes" },

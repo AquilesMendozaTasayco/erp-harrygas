@@ -14,20 +14,20 @@ import { useState, useEffect } from "react";
 
 const menuItems = [
   { name: "Dashboard", icon: Home, href: "/dashboard", badge: null },
-  { name: "Usuarios", icon: Users, href: "/dashboard/usuarios", badge: "3" },
-  { name: "Clientes", icon: Users, href: "/dashboard/clientes", badge: "12" },
-  { name: "Productos", icon: Package, href: "/dashboard/productos", badge: "45" },
-  { name: "Proveedores", icon: Building, href: "/dashboard/proveedores", badge: "8" },
-  { name: "Ventas", icon: ShoppingCart, href: "/dashboard/ventas", badge: "New" },
-  { name: "Pedidos", icon: Truck, href: "/dashboard/pedidos", badge: "5" },
+  { name: "Usuarios", icon: Users, href: "/dashboard/usuarios", badge: "" },
+  { name: "Clientes", icon: Users, href: "/dashboard/clientes", badge: "" },
+  { name: "Productos", icon: Package, href: "/dashboard/productos", badge: "" },
+  { name: "Proveedores", icon: Building, href: "/dashboard/proveedores", badge: "" },
+  { name: "Ventas", icon: ShoppingCart, href: "/dashboard/ventas", badge: "" },
+  { name: "Pedidos", icon: Truck, href: "/dashboard/pedidos", badge: "" },
   { name: "Reportes", icon: BarChart3, href: "/dashboard/reportes", badge: null },
   { name: "Finanzas", icon: DollarSign, href: "/dashboard/finanzas", badge: null },
-  { name: "Analítica", icon: Activity, href: "/dashboard/analitica", badge: "Pro" },
+  { name: "Analítica", icon: Activity, href: "/dashboard/analitica", badge: "" },
   { name: "Inventario", icon: Database, href: "/dashboard/inventario", badge: null },
 ];
 
 const bottomMenuItems = [
-  { name: "Notificaciones", icon: Bell, href: "/dashboard/notificaciones", badge: "5" },
+  { name: "Notificaciones", icon: Bell, href: "/dashboard/notificaciones", badge: "" },
   { name: "Ayuda", icon: HelpCircle, href: "/dashboard/ayuda", badge: null },
   { name: "Configuración", icon: Settings, href: "/dashboard/configuracion", badge: null },
 ];
@@ -35,8 +35,7 @@ const bottomMenuItems = [
 export function Sidebar({ isOpen, setIsOpen }) {
   const pathname = usePathname();
   const [currentTime, setCurrentTime] = useState("");
-  const [userName] = useState("Harry Gas"); // En una app real, esto vendría del contexto
-
+  const [userName] = useState("Aquiles Menooza"); 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -223,42 +222,7 @@ export function Sidebar({ isOpen, setIsOpen }) {
             </div>
           )}
 
-          {/* Menú inferior */}
-          <div className="mt-4">
-            {bottomMenuItems.map(({ name, icon: Icon, href, badge }) => {
-              const active = pathname === href;
-              return (
-                <Link
-                  key={name}
-                  href={href}
-                  className={clsx(
-                    "group flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300",
-                    
-                    active
-                      ? "bg-gray-800/50 text-white"
-                      : "text-gray-400 hover:bg-gray-800/30 hover:text-white",
-                    
-                    !isOpen && "justify-center"
-                  )}
-                >
-                  <div className="relative">
-                    <Icon size={18} className="transition-colors duration-300" />
-                    {badge && (
-                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-[10px] text-white rounded-full flex items-center justify-center">
-                        {badge}
-                      </span>
-                    )}
-                  </div>
-                  
-                  {isOpen && (
-                    <div className="flex-1 flex items-center justify-between">
-                      <span className="text-sm font-medium">{name}</span>
-                    </div>
-                  )}
-                </Link>
-              );
-            })}
-          </div>
+          
         </nav>
 
         {/* Footer del sidebar */}

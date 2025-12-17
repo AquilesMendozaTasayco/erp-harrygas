@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -29,11 +29,15 @@ export default function LoginPage() {
       console.log("LOGIN RESPONSE:", data);
 
       if (data.success) {
+        // Guardar datos del usuario en localStorage
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
         // Alerta de éxito con SweetAlert2
         MySwal.fire({
           icon: 'success',
           title: '¡Inicio de sesión exitoso!',
-          text: data.message,
+          html: `<p>Bienvenido <strong>${data.user.nombre} ${data.user.apellido}</strong></p>
+                 <p class="text-sm text-gray-600">Rol: ${data.user.rol_nombre}</p>`,
           background: '#F9FAFB',
           color: '#1F2937',
           confirmButtonText: 'Continuar',
@@ -42,7 +46,8 @@ export default function LoginPage() {
           timerProgressBar: true,
           showConfirmButton: false,
           didClose: () => {
-            router.push("/dashboard");
+            // Redirigir según el rol
+            router.push(data.redirectTo);
           }
         });
       } else {
@@ -171,7 +176,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Líneas decorativas (manteniendo las originales) */}
+      {/* Líneas decorativas */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-blue-300 to-indigo-400" />
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-400 via-blue-300 to-indigo-400" />
       <div className="absolute bottom-0 right-0 w-full h-1 bg-gradient-to-l from-blue-400 via-blue-300 to-indigo-400" />
@@ -257,7 +262,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Recordarme checkbox con diseño mejorado */}
+            {/* Recordarme checkbox */}
             <div className="flex items-center">
               <div className="relative">
                 <input
@@ -284,13 +289,12 @@ export default function LoginPage() {
               </label>
             </div>
 
-            {/* Botón de envío con efecto de elevación */}
+            {/* Botón de envío */}
             <button
               type="submit"
               disabled={isLoading}
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3.5 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg flex items-center justify-center gap-2 relative overflow-hidden group"
             >
-              {/* Efecto de brillo al pasar el mouse */}
               <span className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               
               {isLoading ? (
@@ -306,7 +310,7 @@ export default function LoginPage() {
               )}
             </button>
 
-            {/* Separador sutil */}
+            {/* Separador */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200"></div>
@@ -343,10 +347,10 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* Información adicional minimalista */}
+        {/* Información adicional */}
         <div className="mt-6 text-center">
           <p className="text-xs text-white/80">
-            © {new Date().getFullYear()} Tu aplicación. Todos los derechos reservados.
+            © {new Date().getFullYear()} Harry Gas. Todos los derechos reservados.
           </p>
         </div>
       </div>
